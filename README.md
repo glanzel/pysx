@@ -164,6 +164,26 @@ header = <Header>Title</Header>
 print(header)
 ```
 
+## Type checking
+
+PyJSX includes a plugin that allows mypy to parse files with JSX in them. To
+use it, add `pyjsx.mypy` to the `plugins` list in your [mypy configuration
+file][mypy]. For example, in `mypy.ini`:
+
+```ini
+[mypy]
+plugins = pyjsx.mypy
+```
+
+Or in `pyproject.toml`:
+
+```toml
+[tool.mypy]
+plugins = ["pyjsx.mypy"]
+```
+
+[mypy]: https://mypy.readthedocs.io/en/stable/config_file.html
+
 ## Prior art
 
 Inspired by [packed](https://github.com/michaeljones/packed) and
