@@ -1,4 +1,4 @@
-from pyjsx import auto_setup
+import pyjsx.auto_setup
 
 from custom import App
 

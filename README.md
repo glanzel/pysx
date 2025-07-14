@@ -52,7 +52,7 @@ def hello():
 
 ```python
 # main.py
-from pyjsx import auto_setup
+import pyjsx.auto_setup
 
 from hello import hello
 
@@ -72,7 +72,7 @@ Each file containing JSX must contain two things:
   it must be in scope.
 
 To run a file containing JSX, the `jsx` codec must be registered first which can
-be done with `from pyjsx import auto_setup`. This must occur before importing
+be done with `import pyjsx.auto_setup`. This must occur before importing
 any other file containing JSX.
 
 ## Minimal example (using an import hook)
@@ -90,7 +90,7 @@ def hello():
 
 ```python
 # main.py
-from pyjsx import auto_setup
+import pyjsx.auto_setup
 
 from hello import hello
 
@@ -109,7 +109,7 @@ Each file containing JSX must contain two things:
   it must be in scope.
 
 To be able to import `.px`, the import hook must be registered first which can
-be done with `from pyjsx import auto_setup` (same as for the codec version). This must occur before importing any other file containing JSX.
+be done with `import pyjsx.auto_setup` (same as for the codec version). This must occur before importing any other file containing JSX.
 
 ## Supported grammar
 
