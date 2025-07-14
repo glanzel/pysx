@@ -1,4 +1,4 @@
-from mypy.plugin import Plugin
+from mypy.plugin import Plugin  # type: ignore[import-untyped]
 
 
 class PyJSXPlugin(Plugin):
