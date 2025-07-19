@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from pyjsx.transpiler import transpile
+from pyjsx.transpiler import ParseError, transpile
 
 
 @pytest.mark.parametrize(
@@ -236,3 +236,8 @@ def _get_stdlib_python_modules():
 def test_roundtrip(module_path):
     source = module_path.read_text("utf-8")
     assert transpile(source) == source
+
+
+def test_mismatched_closing_tags():
+    with pytest.raises(ParseError, match="Expected closing tag </div>, got </span>"):
+        transpile("<div></span>")

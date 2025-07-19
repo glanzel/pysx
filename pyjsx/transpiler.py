@@ -163,7 +163,7 @@ def parse_jsx_element(queue: TokenQueue) -> JSXElement:
     queue.pop_type(TokenType.JSX_SLASH_OPEN)
     closing_tag = queue.pop_type(TokenType.ELEMENT_NAME).value
     if closing_tag != name:
-        msg = f"Expected closing tag {name}, got {closing_tag}"
+        msg = f"Expected closing tag </{name}>, got </{closing_tag}>"
         raise ParseError(msg)
     queue.pop_type(TokenType.JSX_CLOSE)
     return JSXElement(name, attributes, children)
