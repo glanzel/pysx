@@ -1,5 +1,7 @@
 # PyJSX Language Support
 
+![](example.png)
+
 This plugin provides basic language support for [PyJSX](https://github.com/tomasr8/pyjsx).
 
 This includes:
