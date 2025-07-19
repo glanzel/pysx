@@ -210,6 +210,16 @@ def test_jsx_text_escapes(source, expected):
     assert transpile(source) == expected
 
 
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ("<li><>foo</></li>", 'jsx("li", {}, [jsx(jsx.Fragment, {}, ["foo"])])'),
+    ],
+)
+def test_child_fragments(source, expected):
+    assert transpile(source) == expected
+
+
 def _get_stdlib_python_modules():
     modules = sys.stdlib_module_names
     for name in modules:
