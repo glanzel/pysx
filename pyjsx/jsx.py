@@ -70,8 +70,6 @@ class JSXElement:
     def convert_component(self, tag: JSXComponent | JSXFragment) -> str:
         rendered = tag(**self.props, children=self.children)
         match rendered:
-            case None:
-                return ""
             case tuple() | list():
                 return "\n".join(str(child) for child in rendered)
             case _:
