@@ -33,4 +33,4 @@ def test_import():
 @pytest.mark.usefixtures("import_hook")
 def test_import_not_found():
     with pytest.raises(ModuleNotFoundError):
-        from .foo import main  # type: ignore[reportAttributeAccessIssue]
+        from .foo import main  # type: ignore[reportAttributeAccessIssue] # noqa:F401
