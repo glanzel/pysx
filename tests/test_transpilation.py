@@ -219,7 +219,8 @@ def _get_stdlib_python_modules():
             continue
 
         module = None
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(Exception), warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=DeprecationWarning)
             module = __import__(name)
 
         if (file_ := getattr(module, "__file__", None)) is None:
