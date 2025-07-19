@@ -28,3 +28,9 @@ def test_import():
 <h1>
     Hello, World!
 </h1>"""
+
+
+@pytest.mark.usefixtures("import_hook")
+def test_import_not_found():
+    with pytest.raises(ModuleNotFoundError):
+        from .foo import main  # type: ignore[reportAttributeAccessIssue]

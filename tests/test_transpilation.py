@@ -1,6 +1,7 @@
 import contextlib
 import itertools
 import sys
+import warnings
 from pathlib import Path
 
 import pytest
@@ -183,9 +184,7 @@ def App():
 )
 def test_multiline(snapshot, request, source):
     snapshot.snapshot_dir = Path(__file__).parent / "data"
-    snapshot.assert_match(
-        transpile(source), f"transpiler-multiline-{request.node.callspec.id}.txt"
-    )
+    snapshot.assert_match(transpile(source), f"transpiler-multiline-{request.node.callspec.id}.txt")
 
 
 @pytest.mark.parametrize(
