@@ -170,7 +170,7 @@ class Tokenizer:
                     self.mode.angle_brackets += 1
                     self.mode.expects_element_name = True
                 yield Token(TokenType.JSX_OPEN, self.source[self.curr], self.curr, self.curr + 1)
-            elif self.source[self.curr] == ">":
+            else:
                 self.mode.is_inside_open_tag = False
                 if self.mode.is_inside_closing_tag:
                     self.mode.is_inside_closing_tag = False
