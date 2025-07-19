@@ -83,16 +83,12 @@ class _JSX:
     def __call__(
         self,
         tag: str | JSXComponent | JSXFragment,
-        props: dict[str, Any] | None = None,
-        children: list[Any] | None = None,
+        props: dict[str, Any],
+        children: list[Any],
     ) -> JSXElement:
         if not isinstance(tag, str) and not callable(tag):
             msg = f"Element type is invalid. Expected a string or a function but got: {tag!r}"
             raise TypeError(msg)
-        if props is None:
-            props = {}
-        if children is None:
-            children = []
         if (style := props.get("style")) and isinstance(style, dict):
             props["style"] = "; ".join([f"{k}: {v}" for k, v in style.items()])
         return JSXElement(tag, props, children)
