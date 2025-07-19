@@ -5,6 +5,8 @@
 # PyJSX - Write JSX directly in Python
 ![PyPI - Version](https://img.shields.io/pypi/v/python-jsx)
 
+### 👉 We now have a [VSCode plugin](https://marketplace.visualstudio.com/items?itemName=tomasr8.pyjsx)!
+
 ```python
 from pyjsx import jsx, JSX
 
@@ -163,6 +165,10 @@ def Header(children, **rest):
 header = <Header>Title</Header>
 print(header)
 ```
+
+## VS Code support
+
+PyJSX comes with a [VS Code plugin](https://marketplace.visualstudio.com/items?itemName=tomasr8.pyjsx) that provides syntax highlighting.
 
 ## Type checking
 
