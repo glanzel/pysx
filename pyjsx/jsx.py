@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, Protocol, TypeAlias
+from typing import Any, Protocol, TypeAlias, TypeVar
 
 from pyjsx.elements import is_void_element
 from pyjsx.util import flatten, indent
 
 
 __all__ = ["jsx"]
+
+
+_T = TypeVar("_T")
 
 
 class JSXComponent(Protocol):
@@ -94,7 +97,7 @@ class _JSX:
             props["style"] = "; ".join([f"{k}: {v}" for k, v in style.items()])
         return JSXElement(tag, props, children)
 
-    def Fragment(self, *, children: list[Any], **_: Any) -> list[Any]:
+    def Fragment(self, *, children: list[_T], **_: Any) -> list[_T]:
         return children
 
 
