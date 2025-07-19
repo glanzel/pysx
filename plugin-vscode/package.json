@@ -2,6 +2,7 @@
   "name": "pyjsx",
   "displayName": "PyJSX",
   "description": "Provides Language Support for PyJSX",
+  "publisher": "tomasr8",
   "repository": {
     "type": "git",
     "url": "https://github.com/tomasr8/pyjsx"
