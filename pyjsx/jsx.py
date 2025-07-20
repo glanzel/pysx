@@ -9,6 +9,9 @@ from pyjsx.util import flatten, indent
 __all__ = ["jsx"]
 
 
+_Props: TypeAlias = dict[str, Any]
+
+
 class JSXComponent(Protocol):
     __name__: str
 
@@ -29,7 +32,7 @@ def _format_css_rule(key: str, value: Any) -> str:
     return f"{key}: {value}"
 
 
-def _preprocess_props(props: dict[str, Any]) -> dict[str, Any]:
+def _preprocess_props(props: _Props) -> _Props:
     if (style := props.get("style")) and isinstance(style, dict):
         props["style"] = "; ".join(_format_css_rule(k, v) for k, v in style.items() if v is not None)
     return props
@@ -42,7 +45,7 @@ def _render_prop(key: str, value: Any) -> str:
     return f'{key}="{value}"'
 
 
-def _render_props(props: dict[str, Any]) -> str:
+def _render_props(props: _Props) -> str:
     not_none = {k: v for k, v in props.items() if v is not None}
     return " ".join([_render_prop(k, v) for k, v in not_none.items()])
 
@@ -51,7 +54,7 @@ class _JSXElement:
     def __init__(
         self,
         tag: str | JSXComponent | JSXFragment,
-        props: dict[str, Any],
+        props: _Props,
         children: list[JSX],
     ):
         self.tag = tag
@@ -94,7 +97,7 @@ class _JSX:
     def __call__(
         self,
         tag: str | JSXComponent | JSXFragment,
-        props: dict[str, Any],
+        props: _Props,
         children: list[JSX],
     ) -> JSXElement:
         if not isinstance(tag, str) and not callable(tag):
