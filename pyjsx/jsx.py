@@ -25,6 +25,16 @@ class JSXElement(Protocol):
     def __str__(self) -> str: ...
 
 
+def _format_css_rule(key: str, value: Any) -> str:
+    return f"{key}: {value}"
+
+
+def _preprocess_props(props: dict[str, Any]) -> dict[str, Any]:
+    if (style := props.get("style")) and isinstance(style, dict):
+        props["style"] = "; ".join(_format_css_rule(k, v) for k, v in style.items() if v is not None)
+    return props
+
+
 def _render_prop(key: str, value: Any) -> str:
     if isinstance(value, bool):
         return key if value else ""
@@ -90,8 +100,7 @@ class _JSX:
         if not isinstance(tag, str) and not callable(tag):
             msg = f"Element type is invalid. Expected a string or a function but got: {tag!r}"
             raise TypeError(msg)
-        if (style := props.get("style")) and isinstance(style, dict):
-            props["style"] = "; ".join([f"{k}: {v}" for k, v in style.items()])
+        props = _preprocess_props(props)
         return _JSXElement(tag, props, children)
 
     def Fragment(self, *, children: list[JSX], **_: Any) -> list[JSX]:
