@@ -21,11 +21,10 @@ dynamic = ["version"]
 [project.optional-dependencies]
 dev = [
     "build",
-    "uv",
     "pytest",
     "pytest-snapshot",
     "pytest-cov",
-    "ruff",
+    "ruff==0.12.4",
     "pyright",
 ]
 
@@ -80,3 +79,8 @@ packages = ["pyjsx"]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff==0.12.4",
+]
