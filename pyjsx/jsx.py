@@ -65,11 +65,11 @@ class _JSXElement:
     def __str__(self):
         match self.tag:
             case str():
-                return self.convert_builtin(self.tag)
+                return self.render_native_element(self.tag)
             case _:
-                return self.convert_component(self.tag)
+                return self.render_component(self.tag)
 
-    def convert_builtin(self, tag: str) -> str:
+    def render_native_element(self, tag: str) -> str:
         props = _render_props(self.props)
         if props:
             props = f" {props}"
@@ -81,7 +81,7 @@ class _JSXElement:
         children_formatted = "\n".join(indent(str(child)) for child in children)
         return f"<{tag}{props}>\n{children_formatted}\n</{tag}>"
 
-    def convert_component(self, tag: JSXComponent | JSXFragment) -> str:
+    def render_component(self, tag: JSXComponent | JSXFragment) -> str:
         rendered = tag(**self.props, children=self.children)
         match rendered:
             case tuple() | list():
