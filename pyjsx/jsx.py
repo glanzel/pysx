@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Protocol, TypeAlias, TypeVar
+from typing import Any, Protocol, TypeAlias
 
 from pyjsx.elements import is_void_element
 from pyjsx.util import flatten, indent
 
 
 __all__ = ["jsx"]
-
-
-_T = TypeVar("_T")
 
 
 class JSXComponent(Protocol):
@@ -24,7 +21,23 @@ class JSXFragment(Protocol):
     def __call__(self, *, children: list[JSX], **rest: Any) -> list[JSX]: ...
 
 
-class JSXElement:
+class JSXElement(Protocol):
+    def __str__(self) -> str: ...
+
+
+def _render_prop(key: str, value: Any) -> str:
+    if isinstance(value, bool):
+        return key if value else ""
+    value = str(value).replace('"', "&quot;")
+    return f'{key}="{value}"'
+
+
+def _render_props(props: dict[str, Any]) -> str:
+    not_none = {k: v for k, v in props.items() if v is not None}
+    return " ".join([_render_prop(k, v) for k, v in not_none.items()])
+
+
+class _JSXElement:
     def __init__(
         self,
         tag: str | JSXComponent | JSXFragment,
@@ -46,28 +59,16 @@ class JSXElement:
             case _:
                 return self.convert_component(self.tag)
 
-    def convert_prop(self, key: str, value: Any) -> str:
-        if isinstance(value, bool):
-            return key if value else ""
-        value = str(value).replace('"', "&quot;")
-        return f'{key}="{value}"'
-
-    def convert_props(self, props: dict[str, Any]) -> str:
-        not_none = {k: v for k, v in props.items() if v is not None}
-        formatted = " ".join([self.convert_prop(k, v) for k, v in not_none.items()])
-        if formatted:
-            return f" {formatted}"
-        return ""
-
     def convert_builtin(self, tag: str) -> str:
-        props = self.convert_props(self.props)
+        props = _render_props(self.props)
+        if props:
+            props = f" {props}"
         children = [child for child in flatten(self.children) if child is not None]
         if not children:
             if is_void_element(tag):
                 return f"<{tag}{props} />"
             return f"<{tag}{props}></{tag}>"
-        children = flatten(str(child) for child in children)
-        children_formatted = "\n".join(indent(child) for child in children)
+        children_formatted = "\n".join(indent(str(child)) for child in children)
         return f"<{tag}{props}>\n{children_formatted}\n</{tag}>"
 
     def convert_component(self, tag: JSXComponent | JSXFragment) -> str:
@@ -84,16 +85,16 @@ class _JSX:
         self,
         tag: str | JSXComponent | JSXFragment,
         props: dict[str, Any],
-        children: list[Any],
+        children: list[JSX],
     ) -> JSXElement:
         if not isinstance(tag, str) and not callable(tag):
             msg = f"Element type is invalid. Expected a string or a function but got: {tag!r}"
             raise TypeError(msg)
         if (style := props.get("style")) and isinstance(style, dict):
             props["style"] = "; ".join([f"{k}: {v}" for k, v in style.items()])
-        return JSXElement(tag, props, children)
+        return _JSXElement(tag, props, children)
 
-    def Fragment(self, *, children: list[_T], **_: Any) -> list[_T]:
+    def Fragment(self, *, children: list[JSX], **_: Any) -> list[JSX]:
         return children
 
 
