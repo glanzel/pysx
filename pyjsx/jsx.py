@@ -66,13 +66,17 @@ class _JSXElement:
         return f"<{tag} />"
 
     def __str__(self):
+        return self.render()
+
+    def render(self) -> str:
         match self.tag:
             case str():
                 return self.render_native_element(self.tag)
             case _:
-                return self.render_component(self.tag)
+                return self.render_custom_component(self.tag)
 
     def render_native_element(self, tag: str) -> str:
+        """Render a native HTML element such as <div>, <span>, etc."""
         props = _render_props(self.props)
         if props:
             props = f" {props}"
@@ -84,7 +88,8 @@ class _JSXElement:
         children_formatted = "\n".join(indent(str(child)) for child in children)
         return f"<{tag}{props}>\n{children_formatted}\n</{tag}>"
 
-    def render_component(self, tag: JSXComponent | JSXFragment) -> str:
+    def render_custom_component(self, tag: JSXComponent | JSXFragment) -> str:
+        """Render a custom component which is a callable that returns JSX."""
         rendered = tag(**self.props, children=self.children)
         match rendered:
             case tuple() | list():
