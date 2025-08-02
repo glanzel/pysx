@@ -8,4 +8,5 @@ htmlcov
 dist/
 
 venv
+.venv
 .python-version
