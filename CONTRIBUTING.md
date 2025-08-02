@@ -6,31 +6,43 @@ an issue and/or submit a PR!
 ## Developing
 
 To contribute to this project, a development environment is recommended. You'll
-need Python 3.10+.
+need Python 3.10+ and ideally [uv](https://docs.astral.sh/uv/) installed.
+
+### Installing the project:
 
 ```sh
-python -m venv venv
-source venv/bin/activate
-pip install -e ".[dev]"  # Install the project, including the 'dev' extra
+uv sync
 ```
 
 ## Running tests and linters
 
+### Tests
+
 To execute the tests, run:
 
 ```sh
-pytest --no-cov
+uv run pytest
+# Or with the venv activated:
+pytest
 ```
+
+### Linting
 
 This project uses ruff, you can run it as:
 
-```
+```sh
+uv run ruff check pyjsx/ tests/
+# Or with the venv activated:
 ruff check pyjsx/ tests/
 ```
 
-You can also check your code with pyright:
+### Type checking
+
+You can also check your code with ty:
 
 ```sh
-pyright
+uv run ty check pyjsx/ tests/
+# Or with the venv activated:
+ty check pyjsx/ tests/
 ```
 
