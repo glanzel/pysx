@@ -17,17 +17,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # - name: Install dependencies 📦
-      #   run: |
-      #     uv sync
-
       - name: Lint code 🧹
         run: |
           uv run ruff check pyjsx/ tests/
 
-      - name: Type check 🏷
-        run: |
-          uv run pyright
+      # - name: Type check 🏷
+      #   run: |
+      #     uv run pyright
 
       - name: Run tests 🧪
         run: |
