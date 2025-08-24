@@ -158,9 +158,7 @@ def test_multiline_strings(request, snapshot, source):
         "f'{1}'",
         'f"{1}+{1}={2}"',
         'f"{f"{1}"}"',
-        '''f"""
-Hello, {world}!
-"""''',
+        'f"""\nHello, {world}!\n"""',
         'f"Hello, {<b>world</b>}!"',
     ],
     ids=itertools.count(1),
@@ -188,3 +186,37 @@ def test_errors(source, error_msg):
     with pytest.raises(TokenizerError) as excinfo:
         list(tokenizer.tokenize())
     assert str(excinfo.value) == error_msg
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "<turbo-frame></turbo-frame>",
+        "<turbo-frame />",
+        "<foo-></foo->",
+        "<foo- />",
+        "<foo--></foo-->",
+        "<foo-- />",
+    ],
+)
+def test_custom_elements(request, snapshot, source):
+    snapshot.snapshot_dir = Path(__file__).parent / "data"
+    tokenizer = Tokenizer(source)
+    tokens = list(tokenizer.tokenize())
+    snapshot.assert_match(ruff_format(repr(tokens)), f"tokenizer-custom-elements-{request.node.callspec.id}.txt")
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "<-bar></-bar>",
+        "<-bar />",
+        "<-></->",
+        "<- />",
+    ],
+)
+def test_invalid_custom_elements(source):
+    tokenizer = Tokenizer(source)
+    with pytest.raises(TokenizerError) as excinfo:
+        list(tokenizer.tokenize())
+    assert "Unexpected token" in str(excinfo.value)
