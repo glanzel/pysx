@@ -1,0 +1,25 @@
+# coding: jsx
+from pyjsx import jsx, JSX
+from django.db.models import QuerySet
+from todo_app.models import Todo
+
+def Todo(title: str, completed: bool = False, **rest) -> JSX:
+    """A component that represents a single todo item"""
+    status_class = "line-through text-gray-500" if completed else "text-gray-800"
+    return (
+        <div class="bg-white p-4 mb-3 rounded-lg shadow flex items-center transition-all duration-200 hover:shadow-md">
+            <span class={f"text-lg {status_class}"}>{title}</span>
+        </div>
+    )
+
+def TodoList(todos: QuerySet[Todo], **rest) -> JSX:
+    """A component that renders a list of todos"""
+    if not todos:
+        return <p class="text-gray-500 text-center py-4">No todos yet.</p>
+    
+    return (
+        <div>
+            {[<Todo title={todo.title} completed={todo.completed} /> for todo in todos]}
+        </div>
+    )
+
